@@ -1,3 +1,4 @@
+import OwnerView from "@/components/OwnerView";
 import { supabase } from "@/lib/supabase";
 import { Participant, Room } from "@/types/db";
 import { User } from "@supabase/supabase-js";
@@ -33,16 +34,9 @@ export default function OwnerPage({ room, user }: {
     }, [room, user]);
 
     return (
-        <main className="flex flex-col w-full h-full justify-center items-center">
-            <p>Room Code: {room.code}</p>
-            <div className="flex flex-col">
-                <p>Participants:</p>
-                { participants.map((ptc: Participant) => (
-                    <p key={ptc.id}>
-                        {ptc.name}
-                    </p>
-                ))}
-            </div>
-        </main>
+        <OwnerView
+            room={room}
+            participants={participants}
+        />
     );
 }
