@@ -14,26 +14,46 @@ export default function ParticipantPage({ room, user }: {
     const router = useRouter();
 
     useEffect(() => {
-        async function loadParticipantInfo() {
-            const { data: info, error } = await supabase
+        async function loadParticipant() {
+            const { data: newParticipant, error } = await supabase
                 .from("participants")
                 .select("*")
-                .eq("room_id", room.id)
-                .eq("user_id", user.id)
+                .eq("room_id",room.id)
+                .eq("user_id",user.id)
                 .single();
             
-            console.log(error);
-            
-            if(!info || error) {
-                router.push("/");
+            if(error) {
+                console.error(error);
                 return;
             }
 
-            setParticipant(info);
+            setParticipant(newParticipant);
         }
 
-        loadParticipantInfo();
-    }, [room, user]);
+        loadParticipant();
+    }, [room.id, user.id]);
+
+    useEffect(() => {
+        const channel = supabase
+            .channel(`participant-${user.id}`)
+            .on(
+                "postgres_changes",
+                {
+                    event: "UPDATE",
+                    schema: "public",
+                    table: "participants",
+                    filter: `id=eq.${user.id}`
+                },
+                (payload) => {
+                    setParticipant(payload.new as Participant);
+                }
+            )
+            .subscribe();
+        
+        return () => {
+            supabase.removeChannel(channel);
+        };
+    }, [participant?.id]);
 
     if(!participant) {
         return (

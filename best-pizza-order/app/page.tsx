@@ -52,24 +52,33 @@ export default function Home() {
     const user = await getOrCreateUser();
     
     // joining room
-    const { data: room, error: thisError } = await supabase
+    const { data: room, error: roomsError } = await supabase
       .from("rooms")
       .select("*")
       .eq("code", curRoomCode)
       .maybeSingle();
     
     // room doesn't exist
-    if(!room || thisError) {
-      setError(thisError?.message ?? "Room doesn't exist");
+    if(!room || roomsError) {
+      setError(roomsError?.message ?? "Room doesn't exist");
       return;
     }
 
     // enter room
-    if(user.id === room.owner_id) {
-      router.push(`/room/${curRoomCode}`);
-    } else {
-      router.push(`/join/${curRoomCode}`);
-    }
+    
+    // check if id already exists
+    const { data: ptc, error: ptcError } = await supabase
+      .from("participants")
+      .select("*")
+      .eq("user_id", user.id)
+      .eq("room_id", room.id);
+    
+    console.log(ptc);
+    console.log(user.id);
+    console.log(room.id);
+    
+    if(((ptc?.length ?? 0) > 0) && !ptcError) router.push(`/room/${curRoomCode}`);
+    else router.push(`/join/${curRoomCode}`);
   }
 
   if(error) {
@@ -87,6 +96,7 @@ export default function Home() {
       </main>
     );
   }
+
   return (
     <main className="flex flex-col w-full h-full justify-center items-center">
       <div className="flex flex-col p-2 gap-2 justify-center items-center">
