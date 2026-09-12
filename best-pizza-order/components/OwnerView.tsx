@@ -8,8 +8,8 @@ export default function OwnerView({ room, participants, curRegion, curRow, onRel
   onReleaseRow: () => void,
 }) {
   return (
-    <main className="min-h-screen w-full bg-[#FFF8EE] px-8 py-8 text-[#211A16]">
-      <div className="mx-auto flex min-h-screen w-full max-w-7xl flex-col">
+    <main className="min-h-screen w-full overflow-x-hidden bg-[#FFF8EE] px-4 py-6 text-[#211A16] sm:px-8 sm:py-8">
+      <div className="mx-auto flex w-full max-w-7xl flex-col">
 
         <header className="flex items-center justify-between">
           <div>
