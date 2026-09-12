@@ -65,7 +65,7 @@ export default function Home() {
     }
 
     // enter room
-    router.push(`/join`);
+    router.push(`/join/${curRoomCode}`);
   }
 
   if(error) {
