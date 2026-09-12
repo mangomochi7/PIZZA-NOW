@@ -16,7 +16,7 @@
   --border-radius: 12px
 }
 
-
+/*
 @media (prefers-color-scheme: dark) {
   :root {
     --bg-color: #221D1C;
@@ -25,7 +25,7 @@
     --primary-color: #FF4D4D;
     --hover-color: #FFB703;
   }
-}
+}*/
 
 body {
   margin: 0;

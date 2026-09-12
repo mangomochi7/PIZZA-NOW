@@ -57,8 +57,14 @@ export async function formQueue(participants: Participant[]): Promise<string[]> 
       console.error("No users found to build the queue.");
       return [];
   }
+  
+  const regRowComp = new Set(participants.map(user => `${user.region}-${user.row}`))
+  const buildQueue: string[] = [...regRowComp];
 
-  const totalSections = 3;
+  // then shuffle
+  return shuffleArray(buildQueue);
+
+  /*const totalSections = 3;
   
   // Mapping the array to just the "rows" values, putting them in a Set (which removes duplicates), and getting the size.
   const totalRows = new Set(participants.map(user => user.row)).size;
@@ -72,8 +78,5 @@ export async function formQueue(participants: Participant[]): Promise<string[]> 
       // Using template literals to combine the section (1-indexed) and the row label (A, B, C, etc.)
       buildQueue.push(`${getSectionName(sectionIndex)}-${getRowLabel(rowIndex)}`);
     }
-  }   
-
-  // then shuffle
-  return shuffleArray(buildQueue);
+  }*/
 }
