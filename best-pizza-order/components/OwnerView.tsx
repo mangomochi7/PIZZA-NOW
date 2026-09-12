@@ -89,7 +89,7 @@ export default function OwnerView({ room, participants }: {
                   </p>
 
                   <p className="text-sm font-semibold text-[#8A7568]">
-                    Row {ptc.row}
+                    Region: {ptc.region}, Row: {ptc.row}
                   </p>
                 </div>
 

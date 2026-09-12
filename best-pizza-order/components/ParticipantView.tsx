@@ -5,9 +5,11 @@ import { useState } from "react";
 export default function ParticipantView({
   name,
   row,
+  region,
 }: {
   name: string;
   row: string;
+  region: string;
 }) {
   const [isPizzaForMe, setIsPizzaForMe] = useState(false);
 
@@ -29,7 +31,7 @@ export default function ParticipantView({
       </button>
 
       <div className="bg-white px-6 py-3 rounded-lg shadow text-xl font-semibold text-gray-600">
-        Row: {row}
+        Region: {region}, Row: {row}
       </div>
 
       {isPizzaForMe ? (
@@ -46,7 +48,7 @@ export default function ParticipantView({
           <div className="text-3xl font-bold text-gray-900">
             Your row has not been released yet.
           </div>
-          <div className="mt-2 text-xl font-medium text-gray-900">
+          <div className="mt-2 text-xl font-medium ">
             Please wait for your row to be released.
           </div>
         </div>

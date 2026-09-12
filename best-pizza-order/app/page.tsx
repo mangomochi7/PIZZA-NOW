@@ -53,20 +53,46 @@ export default function Home() {
     const user = await getOrCreateUser();
     
     // joining room
+<<<<<<< HEAD
     const { error: thisError } = await supabase
+=======
+    const { data: room, error: roomsError } = await supabase
+>>>>>>> 8d62ed80b665c1c78134e87164b31b2289f3ac26
       .from("rooms")
       .select("code")
       .eq("code", curRoomCode)
       .maybeSingle();
     
     // room doesn't exist
+<<<<<<< HEAD
     if(thisError) {
       setError(thisError.message);
+=======
+    if(!room || roomsError) {
+      setError(roomsError?.message ?? "Room doesn't exist");
+>>>>>>> 8d62ed80b665c1c78134e87164b31b2289f3ac26
       return;
     }
 
     // enter room
+<<<<<<< HEAD
     router.push(`/join/${curRoomCode}`);
+=======
+    
+    // check if id already exists
+    const { data: ptc, error: ptcError } = await supabase
+      .from("participants")
+      .select("*")
+      .eq("user_id", user.id)
+      .eq("room_id", room.id);
+    
+    console.log(ptc);
+    console.log(user.id);
+    console.log(room.id);
+    
+    if(((ptc?.length ?? 0) > 0) && !ptcError) router.push(`/room/${curRoomCode}`);
+    else router.push(`/join/${curRoomCode}`);
+>>>>>>> 8d62ed80b665c1c78134e87164b31b2289f3ac26
   }
 
   if(error) {
@@ -84,6 +110,7 @@ export default function Home() {
       </main>
     );
   }
+
   return (
     <main className="flex min-h-screen w-full items-center justify-center bg-[#FFF8EE] px-8 py-8 text-[#211A16]">      <div className="content-box">
       <div className="flex w-full max-w-md flex-col gap-8 rounded-[2rem] border-2 border-[#211A16] bg-white px-8 py-12 text-center shadow-[8px_8px_0px_#211A16]"></div>
@@ -127,4 +154,5 @@ export default function Home() {
         
     </main>
   );
+  }
 }
