@@ -65,20 +65,20 @@ export default function Home() {
     }
 
     // enter room
-    
-    // check if id already exists
-    const { data: ptc, error: ptcError } = await supabase
-      .from("participants")
-      .select("*")
-      .eq("user_id", user.id)
-      .eq("room_id", room.id);
-    
-    console.log(ptc);
-    console.log(user.id);
-    console.log(room.id);
-    
-    if(((ptc?.length ?? 0) > 0) && !ptcError) router.push(`/room/${curRoomCode}`);
-    else router.push(`/join/${curRoomCode}`);
+
+    // check ownership
+    if(user.id === room.owner_id) router.push(`/room/${curRoomCode}`);
+    else {
+      // check if id already exists
+      const { data: ptc, error: ptcError } = await supabase
+        .from("participants")
+        .select("*")
+        .eq("user_id", user.id)
+        .eq("room_id", room.id);
+      
+      if(((ptc?.length ?? 0) > 0) && !ptcError) router.push(`/room/${curRoomCode}`);
+      else router.push(`/join/${curRoomCode}`);
+    }
   }
 
   if(error) {

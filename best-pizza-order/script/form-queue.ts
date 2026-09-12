@@ -1,9 +1,5 @@
 import { supabase } from "@/lib/supabase"
-interface Participant {
-  id: string; // or number, depending on your DB
-  rows: string | number; // the column you are checking for unique values
-  [key: string]: any;
-}
+import { Participant } from "@/types/db"
 
 async function getAllUsers(): Promise<Participant[] | null> {
   const { data, error } = await supabase
@@ -47,6 +43,7 @@ function getRowLabel(index: number) {
   }
   return label;
 }
+
 function getSectionName(index: number): string {
     const sections = ["left", "center", "right"];
     // Returns "left" for 0, "center" for 1, "right" for 2
@@ -54,11 +51,9 @@ function getSectionName(index: number): string {
 }
 
 // Converted to async to await the user data
-export async function formQueue(): Promise<string[]> {
-  const users = await getAllUsers();
-  
+export async function formQueue(participants: Participant[]): Promise<string[]> {
   // Guard clause in case the fetch fails
-  if (!users) {
+  if (!participants) {
       console.error("No users found to build the queue.");
       return [];
   }
@@ -66,7 +61,7 @@ export async function formQueue(): Promise<string[]> {
   const totalSections = 3;
   
   // Mapping the array to just the "rows" values, putting them in a Set (which removes duplicates), and getting the size.
-  const totalRows = new Set(users.map(user => user.rows)).size;
+  const totalRows = new Set(participants.map(user => user.row)).size;
   
   const maxPossibleCombinations = totalSections * totalRows;
   const buildQueue: string[] = [];
