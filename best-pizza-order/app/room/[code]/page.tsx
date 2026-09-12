@@ -1,23 +1,37 @@
 "use client";
 
 import { supabase } from "@/lib/supabase";
+import { Room } from "@/types/db";
 import { notFound, useParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import OwnerPage from "./OwnerPage";
+import ParticipantPage from "./ParticipantPage";
 
 export default function RoomPage() {
     const [user, setUser] = useState<any>(null);
-    const [room, setRoom] = useState<any>(null);
+    const [room, setRoom] = useState<Room | null>(null);
+
+    const [isOwner, setIsOwner] = useState<boolean | null>(null);
+    
     const [error, setError] = useState<string | null>(null);
+
     const params = useParams();
     const code = params.code as string;
 
-    useEffect(() => {
-        async function loadUser() {
-            const { data: {user} } = await supabase.auth.getUser();
-            setUser(user);
-        }
+    const router = useRouter();
 
-        async function loadRoom() {
+    useEffect(() => {
+        async function loadData() {
+            // get auth user
+            const { data: {user} } = await supabase.auth.getUser();
+            if(!user) {
+                router.push("/");
+                return;
+            }
+            setUser(user);
+
+            // get room
             const { data: room, error } = await supabase
                 .from("rooms")
                 .select("*")
@@ -25,11 +39,13 @@ export default function RoomPage() {
                 .single();
             setRoom(room);
             setError(error ? error.message : null);
+
+            // owner?
+            setIsOwner(user.id === room.owner_id);
         }
 
-        loadUser();
-        loadRoom();
-    }, []);
+        loadData();
+    }, [code]);
 
     if(error) {
         notFound();
@@ -51,9 +67,19 @@ export default function RoomPage() {
         );
     }
 
-    return (
-        <main className="flex flex-col w-full h-full justify-center items-center">
-            <h1>Hi</h1>
-        </main>
-    )
+    if(isOwner) {
+        return (
+            <OwnerPage 
+                room={room}
+                user={user}
+            />
+        );
+    } else {
+        return (
+            <ParticipantPage
+                room={room}
+                user={user} 
+            />
+        );
+    }
 }
