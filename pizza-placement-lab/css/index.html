@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pizza Placement Lab</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div class="app">
+    <header class="app__header">
+      <h1>Pizza Placement Lab</h1>
+      <p id="status-text" class="app__status">Click the floor to place the pizza table.</p>
+    </header>
+
+    <main class="app__main">
+      <div class="room">
+        <canvas id="room-canvas"></canvas>
+        <div class="room__hud">
+          <span>elapsed <strong id="elapsed-time">0.0s</strong></span>
+          <span>arrived <strong id="arrived-count">0 / 0</strong></span>
+        </div>
+      </div>
+
+      <aside class="panel">
+        <section class="panel__section">
+          <h2>Setup</h2>
+
+          <label class="field">
+            <span>Club members</span>
+            <input type="range" id="member-count" />
+            <output id="member-count-value"></output>
+          </label>
+
+          <fieldset class="field field--speed">
+            <legend>Playback speed</legend>
+            <label><input type="radio" name="speed" value="1" checked> 1x</label>
+            <label><input type="radio" name="speed" value="2"> 2x</label>
+            <label><input type="radio" name="speed" value="4"> 4x</label>
+          </fieldset>
+
+          <div class="button-row">
+            <button id="start-btn" class="btn btn--primary">Start trial</button>
+            <button id="reset-btn" class="btn">Reset</button>
+          </div>
+        </section>
+
+        <section class="panel__section">
+          <h2>Trial log</h2>
+          <label class="field field--inline">
+            <span>Sort by</span>
+            <select id="metric-select"></select>
+          </label>
+          <table class="trial-log">
+            <thead>
+              <tr><th>#</th><th>Table at</th><th>Score</th><th></th></tr>
+            </thead>
+            <tbody id="trial-log-body"></tbody>
+          </table>
+        </section>
+      </aside>
+    </main>
+  </div>
+
+  <script src="js/config.js"></script>
+  <script src="js/room.js"></script>
+  <script src="js/entities.js"></script>
+  <script src="js/personalities.js"></script>
+  <script src="js/scoring.js"></script>
+  <script src="js/simulation.js"></script>
+  <script src="js/render.js"></script>
+  <script src="js/ui.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>
