@@ -77,15 +77,9 @@ export default function OwnerPage({ room, user }: {
         <OwnerView
             room={room}
             participants={participants}
+            curRow={releasedRow}
+            curRegion={releasedSect}
+            onReleaseRow={handlePopQueue}
         />
-        <main className="flex flex-col w-full h-full justify-center items-center">
-            <OwnerView
-                room={room}
-                participants={participants}
-                curRow={releasedRow}
-                curRegion={releasedSect}
-                onReleaseRow={handlePopQueue}
-            />
-        </main>
     );
 }
