@@ -52,20 +52,24 @@ export default function Home() {
     const user = await getOrCreateUser();
     
     // joining room
-    const { error: thisError } = await supabase
+    const { data: room, error: thisError } = await supabase
       .from("rooms")
-      .select("code")
+      .select("*")
       .eq("code", curRoomCode)
       .maybeSingle();
     
     // room doesn't exist
-    if(thisError) {
-      setError(thisError.message);
+    if(!room || thisError) {
+      setError(thisError?.message ?? "Room doesn't exist");
       return;
     }
 
     // enter room
-    router.push(`/join/${curRoomCode}`);
+    if(user.id === room.owner_id) {
+      router.push(`/room/${curRoomCode}`);
+    } else {
+      router.push(`/join/${curRoomCode}`);
+    }
   }
 
   if(error) {
