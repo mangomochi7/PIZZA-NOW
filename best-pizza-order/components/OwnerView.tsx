@@ -1,8 +1,11 @@
 import { Participant, Room } from "@/types/db";
 
-export default function OwnerView({ room, participants }: {
-  room: Room;
-  participants: Participant[];
+export default function OwnerView({ room, participants, curRegion, curRow, onReleaseRow }: {
+  room: Room,
+  participants: Participant[],
+  curRegion: string | null,
+  curRow: string | null,
+  onReleaseRow: () => void,
 }) {
   return (
     <main className="min-h-screen w-full bg-[#FFF8EE] px-8 py-8 text-[#211A16]">
@@ -43,8 +46,11 @@ export default function OwnerView({ room, participants }: {
             Most Recently Released
           </p>
 
-          <h2 className="relative mt-2 text-8xl font-black tracking-tight">
-            Row *row*
+          <h2 className="relative mt-2 text-5xl font-black tracking-tight">
+            { (!curRow || !curRegion)
+              ? `...`
+              : `Row ${curRow}, ${curRegion}`
+            }
           </h2>
 
           <p className="relative mt-4 text-2xl font-bold font-medium opacity-90">
@@ -100,6 +106,7 @@ export default function OwnerView({ room, participants }: {
 
         <div className="mt-8 flex justify-end">
           <button
+            onClick={onReleaseRow}
             className="rounded-2xl border-2 border-[#211A16] bg-[#ffbf66] px-8 py-4 text-xl font-black shadow-[5px_5px_0px_#211A16] transition hover:-translate-y-0.5 hover:shadow-[6px_6px_0px_#211A16] active:translate-y-1 active:shadow-[2px_2px_0px_#211A16]"
           >
             Release Next Row

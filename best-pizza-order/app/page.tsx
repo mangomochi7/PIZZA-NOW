@@ -28,7 +28,7 @@ export default function Home() {
     // creates room
     const code = generateRoomCode();
 
-    const { data, error: thisError } = await supabase
+    const { data: room, error: roomError } = await supabase
       .from("rooms")
       .insert({ 
         code,
@@ -37,13 +37,13 @@ export default function Home() {
       .select()
       .single();
     
-    if(thisError) {
-      setError(thisError.message);
+    if(roomError) {
+      setError(roomError.message);
       return;
     }
 
     // redirects to correct room slug upon success
-    router.push(`/room/${data.code}`);
+    router.push(`/room/${room.code}`);
   }
 
   const handleJoinRoom = async () => {
@@ -53,20 +53,33 @@ export default function Home() {
     const user = await getOrCreateUser();
     
     // joining room
-    const { error: thisError } = await supabase
+    const { data: room, error: roomError } = await supabase
       .from("rooms")
-      .select("code")
+      .select("*")
       .eq("code", curRoomCode)
       .maybeSingle();
     
     // room doesn't exist
-    if(thisError) {
-      setError(thisError.message);
+    if((!room) || roomError) {
+      setError(roomError?.message ?? "");
       return;
     }
 
     // enter room
-    router.push(`/join/${curRoomCode}`);
+
+    // check ownership
+    if(user.id === room.owner_id) router.push(`/room/${curRoomCode}`);
+    else {
+      // check if id already exists
+      const { data: ptc, error: ptcError } = await supabase
+        .from("participants")
+        .select("*")
+        .eq("user_id", user.id)
+        .eq("room_id", room.id);
+      
+      if(((ptc?.length ?? 0) > 0) && !ptcError) router.push(`/room/${curRoomCode}`);
+      else router.push(`/join/${curRoomCode}`);
+    }
   }
 
   if(error) {

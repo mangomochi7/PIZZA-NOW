@@ -1,5 +1,6 @@
 import OwnerView from "@/components/OwnerView";
 import { supabase } from "@/lib/supabase";
+import { formQueue } from "@/script/form-queue";
 import { Participant, Room } from "@/types/db";
 import { User } from "@supabase/supabase-js";
 import { useRouter } from "next/navigation";
@@ -11,6 +12,8 @@ export default function OwnerPage({ room, user }: {
 }) {
     const [participants, setParticipants] = useState<Participant[]>([]);
     const [queue, setQueue] = useState<string[]>([]);
+    const [releasedSect, setReleasedSect] = useState<string|null>(null);
+    const [releasedRow, setReleasedRow] = useState<string|null>(null);
     
     const router = useRouter();
 
@@ -29,6 +32,9 @@ export default function OwnerPage({ room, user }: {
             }
 
             setParticipants(info);
+            
+            const newQueue = await formQueue(info);
+            setQueue(newQueue);
         }
 
         loadParticipantsInfo();
@@ -51,7 +57,7 @@ export default function OwnerPage({ room, user }: {
         // bad query
         if(!nextInLine || queryError) return;
 
-        // do smth to those next in line
+        // mark next in line as selected
         const { error: updateError } = await supabase
             .from("participants")
             .update({ status: "selected" })
@@ -61,6 +67,10 @@ export default function OwnerPage({ room, user }: {
             console.log(updateError);
             return;
         }
+
+        // update released sect/row
+        setReleasedSect(region);
+        setReleasedRow(row);
     }
 
     return (
@@ -68,5 +78,14 @@ export default function OwnerPage({ room, user }: {
             room={room}
             participants={participants}
         />
+        <main className="flex flex-col w-full h-full justify-center items-center">
+            <OwnerView
+                room={room}
+                participants={participants}
+                curRow={releasedRow}
+                curRegion={releasedSect}
+                onReleaseRow={handlePopQueue}
+            />
+        </main>
     );
 }
