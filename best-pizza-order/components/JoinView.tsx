@@ -13,7 +13,7 @@ export default function JoinView({
   onNameChange: (value: string) => void;
   onRegionChange: (value: string) => void;
   onRowChange: (value: string) => void;
-  onSubmit: () => void;
+  onSubmit: () => Promise<void>;
 }) {
   return (
     <main className="min-h-screen w-full overflow-x-hidden bg-[#FFF8EE] px-4 py-6 text-[#211A16] sm:px-8 sm:py-8">
@@ -64,7 +64,7 @@ export default function JoinView({
               </p>
             </div>
 
-            <form onSubmit={(e) => {
+            <form onSubmit={(e: React.SubmitEvent) => {
                 e.preventDefault();
                 onSubmit();
             }}

@@ -20,9 +20,7 @@ export default function SetupPage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-  async function handleSubmit(e: React.SubmitEvent) {
-    e.preventDefault();
-
+  async function handleSubmit() {
     const participantName = name.trim();
     const seatRow = row.trim().toUpperCase();
 

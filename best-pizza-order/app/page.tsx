@@ -109,7 +109,7 @@ export default function Home() {
 
   return (
     <main className="flex min-h-screen w-full items-center justify-center bg-[#FFF8EE] px-8 py-8 text-[#211A16]">      <div className="content-box">
-      <div className="flex w-full max-w-md flex-col gap-8 rounded-[2rem] border-2 border-[#211A16] bg-white px-8 py-12 text-center shadow-[8px_8px_0px_#211A16]"></div>
+      {/*<div className="flex w-full max-w-md flex-col gap-8 rounded-[2rem] border-2 border-[#211A16] bg-white px-8 py-12 text-center shadow-[8px_8px_0px_#211A16]"></div>*/}
         <div>
             <h1 className="text-5xl font-black tracking-tight">
               PIZZA! NOW!

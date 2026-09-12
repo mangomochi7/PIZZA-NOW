@@ -51,14 +51,15 @@ export default function OwnerPage({ room, user }: {
                     table: "participants",
                     filter: `room_id=eq.${room.id}`,
                 },
-                (payload) => {
+                async (payload) => {
                     const newParticipant = payload.new as Participant;
-                    setParticipants((cur) => {
-                        if(cur.some((p) => p.id === newParticipant.id)) {
-                            return cur;
-                        }
-                        return [...cur, newParticipant];
-                    });
+                    const newPtcArray = (participants.some((p) => p.id === newParticipant.id))
+                        ? participants
+                        : [...participants, newParticipant];
+
+                    setParticipants(newPtcArray);
+                    const newQueue = await formQueue(newPtcArray);
+                    setQueue(newQueue);
                 }
             ).subscribe();
 
