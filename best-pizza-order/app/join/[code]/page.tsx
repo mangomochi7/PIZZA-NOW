@@ -5,27 +5,37 @@ import { useParams, useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabase";
 import { getOrCreateUser } from "@/lib/auth";
 
-export default function ParticipantSetupPage() {
-  const params = useParams();
+export default function SetupPage() {
   const router = useRouter();
+  const params = useParams();
 
   const code = params.code as string;
 
   const [name, setName] = useState("");
-  const [seat, setSeat] = useState("");
+  const [region, setRegion] = useState("");
+  const [row, setRow] = useState("");
+
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
   async function handleSubmit(e: React.SubmitEvent) {
     e.preventDefault();
 
-    if (!name.trim()) {
+    const participantName = name.trim();
+    const seatRow = row.trim().toUpperCase();
+
+    if (!participantName) {
       setError("Please enter your name.");
       return;
     }
 
-    if (!seat.trim()) {
-      setError("Please enter your seat number.");
+    if (!region) {
+      setError("Please select a region.");
+      return;
+    }
+
+    if (!seatRow) {
+      setError("Please enter your row.");
       return;
     }
 
@@ -33,10 +43,9 @@ export default function ParticipantSetupPage() {
     setError("");
 
     try {
-      // Get the currently authenticated user
       const user = await getOrCreateUser();
 
-      // Find the room
+      // Find the room using the code from the URL
       const { data: room, error: roomError } = await supabase
         .from("rooms")
         .select("id, code")
@@ -48,14 +57,16 @@ export default function ParticipantSetupPage() {
         return;
       }
 
-      // Add this person as a participant
+      // Add participant
       const { error: participantError } = await supabase
         .from("participants")
         .insert({
           room_id: room.id,
           user_id: user.id,
-          name: name.trim(),
-          seat: seat.trim(),
+          name: participantName,
+          region,
+          row: seatRow,
+          status: "waiting",
         });
 
       if (participantError) {
@@ -64,7 +75,6 @@ export default function ParticipantSetupPage() {
         return;
       }
 
-      // Enter the room
       router.push(`/room/${room.code}`);
     } catch (err) {
       console.error(err);
@@ -78,53 +88,69 @@ export default function ParticipantSetupPage() {
     <main className="flex min-h-screen items-center justify-center p-6">
       <div className="w-full max-w-md">
         <h1 className="mb-2 text-3xl font-bold">
-          Join Room {code.toUpperCase()}
+          Tell us about yourself
         </h1>
 
-        <p className="mb-8 text-gray-600">
-          Tell us a little about yourself.
+        <p className="mb-6 text-gray-400">
+          Enter your name and where you're sitting.
         </p>
 
-        <form onSubmit={handleSubmit} className="space-y-5">
+        <form onSubmit={handleSubmit} className="space-y-4">
+          {/* Name */}
           <div>
-            <label
-              htmlFor="name"
-              className="mb-2 block text-sm font-medium"
-            >
+            <label className="mb-1 block text-sm font-medium">
               Name
             </label>
 
             <input
-              id="name"
               type="text"
               value={name}
               onChange={(e) => setName(e.target.value)}
               placeholder="Your name"
               autoComplete="name"
-              className="w-full rounded-lg border px-4 py-3"
+              className="w-full rounded-lg border border-gray-700 bg-gray-900 px-4 py-3 text-white placeholder:text-gray-500 focus:border-white focus:outline-none"
             />
           </div>
 
+          {/* Region */}
           <div>
-            <label
-              htmlFor="seat"
-              className="mb-2 block text-sm font-medium"
+            <label className="mb-1 block text-sm font-medium">
+              Region
+            </label>
+
+            <select
+              value={region}
+              onChange={(e) => setRegion(e.target.value)}
+              className="w-full appearance-none rounded-lg border border-gray-700 bg-gray-900 px-4 py-3 text-white focus:border-white focus:outline-none"
             >
-              Seat number
+              <option value="" disabled>
+                Select a region
+              </option>
+              <option value="left">Left</option>
+              <option value="center">Center</option>
+              <option value="right">Right</option>
+            </select>
+          </div>
+
+          {/* Row */}
+          <div>
+            <label className="mb-1 block text-sm font-medium">
+              Row
             </label>
 
             <input
-              id="seat"
               type="text"
-              value={seat}
-              onChange={(e) => setSeat(e.target.value)}
-              placeholder="e.g. A12"
-              className="w-full rounded-lg border px-4 py-3"
+              value={row}
+              onChange={(e) => setRow(e.target.value)}
+              placeholder="A"
+              maxLength={1}
+              autoComplete="off"
+              className="w-full rounded-lg border border-gray-700 bg-gray-900 px-4 py-3 uppercase text-white placeholder:text-gray-500 focus:border-white focus:outline-none"
             />
           </div>
 
           {error && (
-            <p className="text-sm text-red-500">
+            <p className="text-sm text-red-400">
               {error}
             </p>
           )}
@@ -132,9 +158,9 @@ export default function ParticipantSetupPage() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full rounded-lg bg-black px-4 py-3 text-white disabled:opacity-50"
+            className="w-full rounded-lg bg-white px-4 py-3 font-medium text-black transition-opacity disabled:opacity-50"
           >
-            {loading ? "Joining..." : "Join Room"}
+            {loading ? "Entering..." : "Enter Room"}
           </button>
         </form>
       </div>

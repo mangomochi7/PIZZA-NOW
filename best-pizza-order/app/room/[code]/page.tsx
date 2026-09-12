@@ -53,7 +53,7 @@ export default function RoomPage() {
 
     return (
         <main className="flex flex-col w-full h-full justify-center items-center">
-            <h1>Room {code}</h1>
+            <h1>Hi</h1>
         </main>
     )
 }
