@@ -64,15 +64,9 @@ export default function OwnerPage({ room, user }: {
     }
 
     return (
-        <main className="flex flex-col w-full h-full justify-center items-center">
-            <OwnerView
-                room={room}
-                participants={participants}
-            />
-            <button
-                onClick={handlePopQueue}
-                className="p-2 bg-gray-800"
-            />
-        </main>
+        <OwnerView
+            room={room}
+            participants={participants}
+        />
     );
 }
