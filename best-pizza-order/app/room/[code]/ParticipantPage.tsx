@@ -68,6 +68,7 @@ export default function ParticipantPage({ room, user }: {
             <ParticipantView 
                 name={participant.name}
                 row={participant.row}
+                region={participant.region}
             />
         </main>
     );
