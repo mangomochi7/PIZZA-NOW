@@ -24,7 +24,7 @@ export default function ParticipantPage({ room, user }: {
             
             console.log(error);
             
-            if(!info) {
+            if(!info || error) {
                 router.push("/");
                 return;
             }
@@ -47,6 +47,7 @@ export default function ParticipantPage({ room, user }: {
         <main className="flex flex-col w-full h-full justify-center items-center">
             <ParticipantView 
                 name={participant.name}
+                row={participant.row}
             />
         </main>
     );
