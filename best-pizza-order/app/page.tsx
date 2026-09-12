@@ -43,9 +43,6 @@ export default function Home() {
 
     // redirects to correct room slug upon success
     router.push(`/room/${data.code}`);
-
-    // grant owner role
-    console.log("owner entered");
   }
 
   const handleJoinRoom = async () => {
@@ -68,42 +65,48 @@ export default function Home() {
     }
 
     // enter room
-    router.push(`/room/${curRoomCode}`);
+    router.push(`/join`);
+  }
 
-    // grant participant role
-    console.log("participant entered");
+  if(error) {
+    return (
+      <main className="flex flex-col w-full h-full justify-center items-center">
+        <p>Error: {error}</p>
+      </main>
+    );
   }
   
+  if(loading) {
+    return (
+      <main className="flex flex-col w-full h-full justify-center items-center">
+        <p>Loading...</p>
+      </main>
+    );
+  }
   return (
     <main className="flex flex-col w-full h-full justify-center items-center">
-      { 
-        (loading)
-        ? <p>Loading...</p>  
-        : <>
-          <div className="flex flex-col p-2 gap-2 justify-center items-center">
+      <div className="flex flex-col p-2 gap-2 justify-center items-center">
+          <button
+            onClick={handleCreateRoom}
+            className="w-fit bg-gray-800 p-2 rounded-md"
+          >
+            Create Room
+          </button>
+          <p>or</p>
+          <div className="flex flex-col gap-2 justify-center items-center">
+            <input
+              value={curRoomCode}
+              onChange={(e) => setCurRoomCode(e.target.value.toUpperCase())}
+              className="border-2 border-gray-800"
+            />
             <button
-              onClick={handleCreateRoom}
+              onClick={handleJoinRoom}
               className="w-fit bg-gray-800 p-2 rounded-md"
             >
-              Create Room
+              Join Room
             </button>
-            <p>or</p>
-            <div className="flex flex-col gap-2 justify-center items-center">
-              <input
-                value={curRoomCode}
-                onChange={(e) => setCurRoomCode(e.target.value.toUpperCase())}
-                className="border-2 border-gray-800"
-              />
-              <button
-                onClick={handleJoinRoom}
-                className="w-fit bg-gray-800 p-2 rounded-md"
-              >
-                Join Room
-              </button>
-            </div>
           </div>
-        </>
-      }
+        </div>
     </main>
   );
 }
