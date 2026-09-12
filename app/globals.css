@@ -1,0 +1,89 @@
+@import "tailwindcss";
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+:root {
+  --bg-color: #FDF8F5;
+  --panel-bg: #FFFFFF;
+  --text-color: #4A2E2B;
+  --primary-color: #E63946;
+  --hover-color: #F4A261;
+  --border-radius: 12px
+}
+
+/*
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg-color: #221D1C;
+    --panel-bg: #2D2524;
+    --text-color: #F9F1E6;
+    --primary-color: #FF4D4D;
+    --hover-color: #FFB703;
+  }
+}*/
+
+body {
+  margin: 0;
+  height: 50vh;
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+  transition: background-color 0.3s ease;
+}
+
+.center-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+}
+
+.content-box {
+  display: flex;
+  flex-direction: column; 
+  align-items: stretch; 
+  gap: 15px; 
+  background-color: var(--panel-bg);
+  padding: 40px;
+  border: 3px solid var(--primary-color);
+  border-radius: var(--border-radius);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+  width: 300px; /* Fixed width for a nice menu card look */
+  text-align: center;
+}
+
+.content-box p {
+  margin: 0 0 10px 0;
+  font-weight: 800;
+  font-size: 1.2rem;
+  letter-spacing: 1px;
+}
+
+/* 5. Inputs and Buttons */
+.content-box input {
+  padding: 12px;
+  border: 2px solid var(--text-color);
+  border-radius: var(--border-radius);
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  font-size: 1rem;
+}
+
+
+.content-box button {
+  padding: 12px;
+  background-color: var(--primary-color);
+  color: #FFFFFF; /* Keep button text white for contrast */
+  border: none;
+  border-radius: var(--border-radius);
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.2s ease, transform 0.1s;
+}
