@@ -101,14 +101,12 @@ export default function OwnerPage({ room, user }: {
     }
 
     return (
-        <main className="flex flex-col w-full h-full justify-center items-center">
-            <OwnerView
-                room={room}
-                participants={participants}
-                curRow={releasedRow}
-                curRegion={releasedSect}
-                onReleaseRow={handlePopQueue}
-            />
-        </main>
+        <OwnerView
+            room={room}
+            participants={participants}
+            curRow={releasedRow}
+            curRegion={releasedSect}
+            onReleaseRow={handlePopQueue}
+        />
     );
 }
