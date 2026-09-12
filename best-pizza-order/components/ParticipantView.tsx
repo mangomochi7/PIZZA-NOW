@@ -17,11 +17,10 @@ export default function ParticipantView({
         isPizzaForMe ? "bg-green-400" : "bg-red-400"
       }`}
     >
-      <h1 className="absolute top-8 text-3xl font-bold">
+      <h1 className="absolute top-8 text-3xl font-bold text-gray-900">
         Hi {name}!
       </h1>
 
-      {/* Temporary toggle button - easy to delete later */}
       <button
         onClick={() => setIsPizzaForMe(!isPizzaForMe)}
         className="absolute top-4 right-4 bg-white px-4 py-2 rounded-lg shadow text-sm text-gray-300"
@@ -29,26 +28,25 @@ export default function ParticipantView({
         Toggle Pizza Status
       </button>
 
-      {/* Row */}
-      <div className="bg-white px-6 py-3 rounded-lg shadow text-xl font-semibold text-gray-300">
+      <div className="bg-white px-6 py-3 rounded-lg shadow text-xl font-semibold text-gray-600">
         Row: {row}
       </div>
 
       {isPizzaForMe ? (
-        <div className="mt-4 text-center">
-          <div className="text-3xl font-bold">
+        <div className="mt-4 text-center ">
+          <div className="text-3xl font-bold text-gray-900">
             Your row has been released!
           </div>
-          <div className="mt-2 text-xl font-medium">
+          <div className="mt-2 text-xl font-medium text-gray-900">
             Get your pizza at the front.
           </div>
         </div>
       ) : (
         <div className="mt-4 text-center">
-          <div className="text-3xl font-bold">
+          <div className="text-3xl font-bold text-gray-900">
             Your row has not been released yet.
           </div>
-          <div className="mt-2 text-xl font-medium">
+          <div className="mt-2 text-xl font-medium text-gray-900">
             Please wait for your row to be released.
           </div>
         </div>
