@@ -64,7 +64,12 @@ export default function JoinView({
               </p>
             </div>
 
-            <form onSubmit={onSubmit} className="space-y-6">
+            <form onSubmit={(e) => {
+                e.preventDefault();
+                onSubmit();
+            }}
+            className="space-y-6"
+            >
               <div>
                 <label className="mb-2 block text-sm font-black uppercase tracking-[0.12em]">
                   Name
