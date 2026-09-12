@@ -40,6 +40,33 @@ export default function OwnerPage({ room, user }: {
         loadParticipantsInfo();
     }, [room, user]);
 
+    useEffect(() => {
+        const channel = supabase
+            .channel(`room-${room.id}`)
+            .on(
+                "postgres_changes",
+                {
+                    event: "INSERT",
+                    schema: "public",
+                    table: "participants",
+                    filter: `room_id=eq.${room.id}`,
+                },
+                (payload) => {
+                    const newParticipant = payload.new as Participant;
+                    setParticipants((cur) => {
+                        if(cur.some((p) => p.id === newParticipant.id)) {
+                            return cur;
+                        }
+                        return [...cur, newParticipant];
+                    });
+                }
+            ).subscribe();
+
+            return () => {
+                supabase.removeChannel(channel);
+            };
+    }, [room.id]);
+
     const handlePopQueue = async () => {
         if(queue.length === 0) return;
         const nextGroupComp: string = queue.pop() ?? "";
