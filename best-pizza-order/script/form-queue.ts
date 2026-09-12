@@ -54,7 +54,7 @@ function getSectionName(index: number): string {
 }
 
 // Converted to async to await the user data
-async function formQueue(): Promise<string[]> {
+export async function formQueue(): Promise<string[]> {
   const users = await getAllUsers();
   
   // Guard clause in case the fetch fails
