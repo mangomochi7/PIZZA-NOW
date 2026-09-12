@@ -7,7 +7,7 @@ export default function ParticipantView({
   row,
 }: {
   name: string;
-  row: number;
+  row: string;
 }) {
   const [isPizzaForMe, setIsPizzaForMe] = useState(false);
 
@@ -29,7 +29,7 @@ export default function ParticipantView({
         Toggle Pizza Status
       </button>
 
-      {/* Row number */}
+      {/* Row */}
       <div className="bg-white px-6 py-3 rounded-lg shadow text-xl font-semibold text-gray-300">
         Row: {row}
       </div>
