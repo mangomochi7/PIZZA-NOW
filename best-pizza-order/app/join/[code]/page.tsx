@@ -1,5 +1,7 @@
 "use client";
 
+import JoinView from "@/components/JoinView";
+
 import { useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabase";
@@ -85,85 +87,17 @@ export default function SetupPage() {
   }
 
   return (
-    <main className="flex min-h-screen items-center justify-center p-6">
-      <div className="w-full max-w-md">
-        <h1 className="mb-2 text-3xl font-bold">
-          Tell us about yourself
-        </h1>
-
-        <p className="mb-6 text-gray-400">
-          Enter your name and where you're sitting.
-        </p>
-
-        <form onSubmit={handleSubmit} className="space-y-4">
-          {/* Name */}
-          <div>
-            <label className="mb-1 block text-sm font-medium">
-              Name
-            </label>
-
-            <input
-              type="text"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              placeholder="Your name"
-              autoComplete="name"
-              className="w-full rounded-lg border border-gray-700 bg-gray-900 px-4 py-3 text-white placeholder:text-gray-500 focus:border-white focus:outline-none"
-            />
-          </div>
-
-          {/* Region */}
-          <div>
-            <label className="mb-1 block text-sm font-medium">
-              Region
-            </label>
-
-            <select
-              value={region}
-              onChange={(e) => setRegion(e.target.value)}
-              className="w-full appearance-none rounded-lg border border-gray-700 bg-gray-900 px-4 py-3 text-white focus:border-white focus:outline-none"
-            >
-              <option value="" disabled>
-                Select a region
-              </option>
-              <option value="left">Left</option>
-              <option value="center">Center</option>
-              <option value="right">Right</option>
-            </select>
-          </div>
-
-          {/* Row */}
-          <div>
-            <label className="mb-1 block text-sm font-medium">
-              Row
-            </label>
-
-            <input
-              type="text"
-              value={row}
-              onChange={(e) => setRow(e.target.value)}
-              placeholder="A"
-              maxLength={1}
-              autoComplete="off"
-              className="w-full rounded-lg border border-gray-700 bg-gray-900 px-4 py-3 uppercase text-white placeholder:text-gray-500 focus:border-white focus:outline-none"
-            />
-          </div>
-
-          {error && (
-            <p className="text-sm text-red-400">
-              {error}
-            </p>
-          )}
-
-          <button
-            type="submit"
-            disabled={loading}
-            className="w-full rounded-lg bg-white px-4 py-3 font-medium text-black transition-opacity disabled:opacity-50"
-          >
-            {loading ? "Entering..." : "Enter Room"}
-          </button>
-        </form>
-      </div>
-    </main>
+    <JoinView
+      code={code}
+      name={name}
+      region={region}
+      row={row}
+      loading={loading}
+      error={error}
+      onNameChange={setName}
+      onRegionChange={setRegion}
+      onRowChange={setRow}
+      onSubmit={handleSubmit}
+    />
   );
 }
