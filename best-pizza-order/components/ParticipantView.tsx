@@ -6,10 +6,12 @@ export default function ParticipantView({
   name,
   row,
   region,
+  roomCode
 }: {
   name: string;
   row: string;
   region: string;
+  roomCode: string;
 }) {
   const [isPizzaForMe, setIsPizzaForMe] = useState(false);
 
@@ -30,6 +32,16 @@ export default function ParticipantView({
               Hi {name}!
             </h1>
           </div>
+          
+        <div className="shrink-0 rounded-2xl border-2 border-[#211A16] bg-[#ffbf66] px-4 py-3 text-center shadow-[4px_4px_0px_#211A16] sm:px-7 sm:py-4">
+            <p className="text-[10px] font-black uppercase tracking-[0.15em] sm:text-xs sm:tracking-[0.2em]">
+                ROOM CODE:
+            </p>
+            <p className="mt-1 text-xl font-black tracking-widest sm:text-3xl">
+                {roomCode}
+            </p>
+        </div>
+
         </header>
 
         {/* Main status */}
