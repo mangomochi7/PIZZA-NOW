@@ -65,7 +65,7 @@ export default function OwnerView({ room, participants, curRegion, curRow, onRel
           <div className="mb-5 flex items-end justify-between">
             <div>
               <p className="text-sm font-black uppercase tracking-[0.2em] text-[#E94F37]">
-                Who's waiting?
+                Who's here?
               </p>
 
               <h2 className="text-4xl font-black">
