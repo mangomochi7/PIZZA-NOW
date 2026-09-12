@@ -6,8 +6,10 @@ import { customAlphabet } from "nanoid";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import './globals.css';
+import { User } from "@supabase/supabase-js";
 
 export default function Home() {
+  const [user, setUser] = useState<User|null>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
   const [curRoomCode, setCurRoomCode] = useState<string>("");
@@ -23,62 +25,69 @@ export default function Home() {
     setLoading(true);
 
     // check/add as valid user
-    const user = await getOrCreateUser();
-    
-    // creates room
-    const code = generateRoomCode();
+    try {
+      const user = await getOrCreateUser();
+      
+      // creates room
+      const code = generateRoomCode();
 
-    const { data: room, error: roomError } = await supabase
-      .from("rooms")
-      .insert({ 
-        code,
-        owner_id: user.id
-      })
-      .select()
-      .single();
-    
-    if(roomError) {
-      setError(roomError.message);
-      return;
+      const { data: room, error: roomError } = await supabase
+        .from("rooms")
+        .insert({ 
+          code,
+          owner_id: user.id
+        })
+        .select()
+        .single();
+      
+      if(roomError) {
+        setError(roomError.message);
+        return;
+      }
+
+      // redirects to correct room slug upon success
+      router.push(`/room/${room.code}`);
+    } finally {
+      setLoading(false);
     }
-
-    // redirects to correct room slug upon success
-    router.push(`/room/${room.code}`);
   }
 
   const handleJoinRoom = async () => {
     setLoading(true);
 
-    // check/add as valid user
-    const user = await getOrCreateUser();
-    
-    // joining room
-    const { data: room, error: roomError } = await supabase
-      .from("rooms")
-      .select("*")
-      .eq("code", curRoomCode)
-      .maybeSingle();
-    
-    // room doesn't exist
-    if((!room) || roomError) {
-      setError(roomError?.message ?? "");
-      return;
-    }
-
-    // enter room
-
-    // check ownership
-    if(user.id === room.owner_id) router.push(`/room/${curRoomCode}`);
-    else {
-      // check if id already exists
-      const { data: ptc, error: ptcError } = await supabase
-        .from("participants")
-        .select("*")
-        .eq("user_id", user.id)
-        .eq("room_id", room.id);
+    try {// check/add as valid user
+      const user = await getOrCreateUser();
       
-      if(((ptc?.length ?? 0) > 0) && !ptcError) router.push(`/room/${curRoomCode}`);
-      else router.push(`/join/${curRoomCode}`);
+      // joining room
+      const { data: room, error: roomError } = await supabase
+        .from("rooms")
+        .select("*")
+        .eq("code", curRoomCode)
+        .maybeSingle();
+      
+      // room doesn't exist
+      if((!room) || roomError) {
+        setError(roomError?.message ?? "");
+        return;
+      }
+
+      // enter room
+
+      // check ownership
+      if(user.id === room.owner_id) router.push(`/room/${curRoomCode}`);
+      else {
+        // check if id already exists
+        const { data: ptc, error: ptcError } = await supabase
+          .from("participants")
+          .select("*")
+          .eq("user_id", user.id)
+          .eq("room_id", room.id);
+        
+        if(((ptc?.length ?? 0) > 0) && !ptcError) router.push(`/room/${curRoomCode}`);
+        else router.push(`/join/${curRoomCode}`);
+      }
+    } finally {
+      setLoading(false);
     }
   }
 
