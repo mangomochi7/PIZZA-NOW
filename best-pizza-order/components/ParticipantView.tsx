@@ -6,19 +6,20 @@ export default function ParticipantView({
   name,
   row,
   region,
-  roomCode
+  roomCode,
+  isMyTurn
 }: {
-  name: string;
-  row: string;
-  region: string;
-  roomCode: string;
+  name: string,
+  row: string,
+  region: string,
+  roomCode: string,
+  isMyTurn: boolean,
 }) {
-  const [isPizzaForMe, setIsPizzaForMe] = useState(false);
 
   return (
     <main
       className={`min-h-screen w-full overflow-hidden px-4 py-6 sm:px-8 sm:py-8 text-[#211A16] transition-colors duration-500 ${
-        isPizzaForMe ? "bg-green-400" : "bg-red-400"
+        isMyTurn ? "bg-green-400" : "bg-red-400"
       }`}
     >
       <div className="mx-auto flex min-h-[calc(100vh-3rem)] w-full max-w-6xl flex-col sm:min-h-[calc(100vh-4rem)]">
@@ -54,7 +55,7 @@ export default function ParticipantView({
             🍕
           </div>
 
-          {isPizzaForMe ? (
+          {isMyTurn ? (
             <>
               <h2 className="relative text-5xl font-black tracking-tight sm:text-7xl md:text-8xl">
                 YOU ARE UP!
@@ -115,7 +116,7 @@ export default function ParticipantView({
           </div>
         </section>
 
-        {/* Temporary */}
+        {/* Temporary
         <div className="mt-4 flex justify-end sm:mt-8">
           <button
             onClick={() => setIsPizzaForMe(!isPizzaForMe)}
@@ -123,7 +124,7 @@ export default function ParticipantView({
           >
             Toggle Pizza Status
           </button>
-        </div>
+        </div> */}
       </div>
     </main>
   );

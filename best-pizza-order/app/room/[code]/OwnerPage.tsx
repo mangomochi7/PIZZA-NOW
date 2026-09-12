@@ -88,7 +88,9 @@ export default function OwnerPage({ room, user }: {
         const { error: updateError } = await supabase
             .from("participants")
             .update({ status: "selected" })
-            .eq("room_id", room.id);
+            .eq("room_id", room.id)
+            .eq("region", region)
+            .eq("row", row);
 
         if(updateError) {
             console.log(updateError);

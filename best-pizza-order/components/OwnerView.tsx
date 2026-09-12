@@ -49,7 +49,7 @@ export default function OwnerView({ room, participants, curRegion, curRow, onRel
           <h2 className="relative mt-2 text-5xl font-black tracking-tight">
             { (!curRow || !curRegion)
               ? `...`
-              : `Row ${curRow}, ${curRegion}`
+              : `Region ${curRegion}, Row ${curRow}`
             }
           </h2>
 

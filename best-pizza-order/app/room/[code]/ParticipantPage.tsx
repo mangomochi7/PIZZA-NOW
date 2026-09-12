@@ -42,18 +42,21 @@ export default function ParticipantPage({ room, user }: {
                     event: "UPDATE",
                     schema: "public",
                     table: "participants",
-                    filter: `id=eq.${user.id}`
+                    filter: `user_id=eq.${user.id}`
                 },
                 (payload) => {
+                    console.log(payload.new);
                     setParticipant(payload.new as Participant);
                 }
             )
-            .subscribe();
+            .subscribe((status) => {
+                console.log("Realtime status:", status);
+            });
         
         return () => {
             supabase.removeChannel(channel);
         };
-    }, [participant?.id]);
+    }, [user.id]);
 
     if(!participant) {
         return (
@@ -70,6 +73,7 @@ export default function ParticipantPage({ room, user }: {
                 row={participant.row}
                 region={participant.region}
                 roomCode={room.code}
+                isMyTurn={participant.status === "selected"}
             />
         </main>
     );
